@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+# Generate synthetic data (sine wave with noise)
+np.random.seed(0)
+X = np.sort(5 * np.random.rand(80, 1), axis=0)
+y = np.sin(X).ravel() + np.random.rand(80)
+def locally_weighted_regression(test_point, X, y, tau):
+    # The following lines were not indented, causing the error
+    m,n = X.shape 
+    weights = np.zeros((m, m))
+
+    # Removed the random number 48
+
+    for i in range(m):
+        xi = X[i]
+        weights[i, i] = np.exp(-((test_point - xi) ** 2) / (2 * tau ** 2))
+    theta = np.linalg.pinv(X.T @ (weights @ X)) @ (X.T @ (weights @ y))
+    return test_point * theta
+# Predict for a set of test points
+tau = 0.1 # Bandwidth parameter
+X_test = np.linspace(0, 5, 100)
+y_pred = [locally_weighted_regression(test_point, X, y, tau) for test_point in X_test]
+# Plot the data and predictions
+plt.scatter(X, y, c='r', label='Data points')
+plt.plot(X_test, y_pred, c='b', label='LWR Predictions')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.show()
