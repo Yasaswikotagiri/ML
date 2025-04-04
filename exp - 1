@@ -1,0 +1,16 @@
+import pandas as pd
+import numpy as np
+data = pd.read_csv('/content/plant_growth_data.csv')
+print(data)
+features = np.array(data)[:,:-1]
+print(features)
+target = np.array(data)[:,-1]
+print(target)
+def train(fea,tar):
+  specific_h = "?"
+  for i,val in enumerate(tar):
+    if val == "yes":
+      specific_h = fea[i].copy()
+      break
+  return specific_h
+  print(train(feature,target))
