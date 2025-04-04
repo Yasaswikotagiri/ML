@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+# Load dataset (Heart Disease Dataset from UCI)
+
+url = "/content/dataset/heart.csv"
+
+columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach',
+'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
+df = pd.read_csv(url, names=columns, na_values="?")
+# 1. Basic dataset info (reduced)
+print("Dataset Shape:", df.shape)
+print("\nFirst 5 Rows:\n", df.head())
+# 2. Handle missing values
+df.dropna(inplace=True)
+# 3. Check class distribution
+plt.figure(figsize=(5, 3))
+sns.countplot(x=df['target'], palette="viridis")
+plt.title("Class Distribution")
+plt.xlabel("Target Class (0: No Disease, 1-4: Disease)")
+plt.ylabel("Count")
+plt.show()
+# 4. Show correlation of top features (reduce output)
+correlation = df.corr()['target'].abs().sort_values(ascending=False)
+print("\nTop Correlated Features with Target:\n", correlation.head(6))
+# 5. Boxplot of select features (outlier detection)
+selected_features = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+plt.figure(figsize=(10, 5))
+sns.boxplot(data=df[selected_features])
+plt.xticks(rotation=90)
+plt.title("Boxplot of Selected Features")
+plt.show()
