@@ -1,0 +1,30 @@
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+# Load the 20 newsgroups dataset
+newsgroups = fetch_20newsgroups(subset='all', remove=('headers', 'footers', 'quotes'))
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(newsgroups.data, newsgroups.target,
+test_size=0.2, random_state=42)
+
+52
+
+# Vectorize the text data
+vectorizer = CountVectorizer()
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
+# Train the Naive Bayes Classifier
+nb_classifier = MultinomialNB()
+nb_classifier.fit(X_train_vec, y_train)
+# Make predictions
+y_pred = nb_classifier.predict(X_test_vec)
+# Calculate Accuracy, Precision, and Recall
+accuracy = metrics.accuracy_score(y_test, y_pred)
+precision = metrics.precision_score(y_test, y_pred, average='weighted')
+recall = metrics.recall_score(y_test, y_pred, average='weighted')
+# Print the results
+print(f"Accuracy: {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
